@@ -1,0 +1,79 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Role {
+  id          Int     @id @default(autoincrement())
+  name        String  @unique(map: "name") @db.VarChar(50)
+  description String? @db.Text
+  users       User[]
+
+  @@map("roles")
+}
+
+model User {
+  id             Int             @id @default(autoincrement())
+  username       String          @unique(map: "username") @db.VarChar(50)
+  password_hash  String          @map("password_hash") @db.VarChar(255)
+  role_id        Int
+  deleted_at     DateTime?       @db.Timestamp(0)
+  email          String          @unique(map: "email") @db.VarChar(255)
+  stockMovements StockMovement[]
+  role           Role            @relation(fields: [role_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "users_ibfk_1")
+
+  @@index([role_id], map: "role_id")
+  @@map("users")
+}
+
+model Warehouse {
+  id             Int             @id @default(autoincrement())
+  name           String          @db.VarChar(100)
+  location       String?         @db.VarChar(255)
+  deleted_at     DateTime?       @db.Timestamp(0)
+  stockMovements StockMovement[]
+
+  @@map("warehouses")
+}
+
+model Item {
+  id             Int             @id @default(autoincrement())
+  name           String          @db.VarChar(100)
+  description    String?         @db.Text
+  current_stock  Int?            @default(0)
+  created_at     DateTime?       @default(now()) @db.Timestamp(0)
+  updated_at     DateTime?       @default(now()) @updatedAt @db.Timestamp(0)
+  deleted_at     DateTime?       @db.Timestamp(0)
+  warehouse_id   Int?
+  stockMovements StockMovement[]
+
+  @@map("items")
+}
+
+model StockMovement {
+  id            Int                           @id @default(autoincrement())
+  item_id       Int
+  warehouse_id  Int
+  user_id       Int?
+  movement_type stock_movements_movement_type
+  quantity      Int
+  created_at    DateTime?                     @default(now()) @db.Timestamp(0)
+  item          Item                          @relation(fields: [item_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "stock_movements_ibfk_1")
+  warehouse     Warehouse                     @relation(fields: [warehouse_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "stock_movements_ibfk_2")
+  user          User?                         @relation(fields: [user_id], references: [id], onUpdate: NoAction, map: "stock_movements_ibfk_3")
+
+  @@index([item_id], map: "item_id")
+  @@index([user_id], map: "user_id")
+  @@index([warehouse_id], map: "warehouse_id")
+  @@map("stock_movements")
+}
+
+enum stock_movements_movement_type {
+  IN
+  ADJUSTMENT
+  DELETE
+}
