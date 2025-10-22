@@ -4,11 +4,13 @@ import { getUserFromAuthHeader } from "../../../../lib/auth";
 
 export async function GET(
   req: Request,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await context.params;
+
   try {
     const item = await prisma.item.findUnique({
-      where: { id: Number(params.id) },
+      where: { id: Number(id) },
     });
 
     if (!item) {
@@ -27,8 +29,9 @@ export async function GET(
 
 export async function PUT(
   req: Request,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await context.params;
   try {
     const authHeader = req.headers.get("authorization") || undefined;
     const user = await getUserFromAuthHeader(authHeader);
@@ -39,13 +42,13 @@ export async function PUT(
     const { name, currentStock, description, warehouseId } = body;
 
     const existing = await prisma.item.findUnique({
-      where: { id: Number(params.id) },
+      where: { id: Number(id) },
     });
     if (!existing)
       return NextResponse.json({ error: "Item not found" }, { status: 404 });
 
     const updated = await prisma.item.update({
-      where: { id: Number(params.id) },
+      where: { id: Number(id) },
       data: {
         name,
         current_stock: currentStock,
@@ -57,13 +60,21 @@ export async function PUT(
 
     if (currentStock !== existing.current_stock && warehouseId) {
       const diff = currentStock - existing.current_stock;
+
+      let movementType: "ADJUSTMENT" | "OUT";
+      if (diff > 0) {
+        movementType = "ADJUSTMENT";
+      } else {
+        movementType = "OUT";
+      }
+
       await prisma.stockMovement.create({
         data: {
           item_id: updated.id,
           warehouse_id: Number(warehouseId),
           user_id: user.id,
-          movement_type: "ADJUSTMENT",
-          quantity: diff,
+          movement_type: movementType,
+          quantity: Math.abs(diff),
           created_at: new Date(),
         },
       });
@@ -81,8 +92,10 @@ export async function PUT(
 }
 export async function DELETE(
   req: Request,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await context.params;
+
   try {
     const { searchParams } = new URL(req.url);
     const warehouseId = searchParams.get("warehouse");
@@ -92,7 +105,7 @@ export async function DELETE(
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
     const item = await prisma.item.update({
-      where: { id: Number(params.id) },
+      where: { id: Number(id) },
       data: { deleted_at: new Date() },
     });
 

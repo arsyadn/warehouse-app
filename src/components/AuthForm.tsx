@@ -30,6 +30,11 @@ const AuthForm: React.FC<AuthFormProps> = ({ type }) => {
 
   useEffect(() => {
     setIsMounted(true);
+
+    const token = localStorage.getItem("token");
+    if (token) {
+      router.push("/");
+    }
   }, []);
 
   const handleSubmit = async (values: FormValues) => {

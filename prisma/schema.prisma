@@ -76,4 +76,5 @@ enum stock_movements_movement_type {
   IN
   ADJUSTMENT
   DELETE
+  OUT
 }

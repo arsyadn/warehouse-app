@@ -22,6 +22,7 @@ async function main() {
     update: {},
     create: {
       username: "admin",
+      email: "admin@gmail.com",
       password_hash: pwHash,
       role: { connect: { name: "Admin" } },
     },
@@ -39,13 +40,11 @@ async function main() {
     data: [
       {
         name: "Mouse Logitech",
-        sku: "SKU-001",
         description: "Wireless mouse",
         current_stock: 100,
       },
       {
         name: "Keyboard Rexus",
-        sku: "SKU-002",
         description: "Mechanical keyboard",
         current_stock: 50,
       },

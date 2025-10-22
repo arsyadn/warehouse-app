@@ -5,6 +5,7 @@ import { Button, Card, Form, Input, InputNumber, Spin, message } from "antd";
 import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
 import authAxios from "../../../../../../lib/authAxios";
+import { UserType } from "../../../../../../components/Navbar";
 
 type Item = {
   id: number;
@@ -23,6 +24,25 @@ export default function EditItemPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [warehouse_id, setWarehouseId] = useState<number | null>(null);
+
+  const onFinish = async (values: Item) => {
+    try {
+      setSaving(true);
+      await authAxios.put(`/api/items/${id}`, {
+        name: values.name,
+        currentStock: values.current_stock,
+        description: values.description,
+        warehouseId: warehouse_id,
+      });
+      message.success("Item updated successfully!");
+      router.push("/");
+    } catch (err) {
+      console.error(err);
+      message.error("Failed to update item.");
+    } finally {
+      setSaving(false);
+    }
+  };
 
   useEffect(() => {
     async function fetchItem() {
@@ -45,24 +65,14 @@ export default function EditItemPage() {
     fetchItem();
   }, [id, form]);
 
-  async function onFinish(values: Item) {
-    try {
-      setSaving(true);
-      await authAxios.put(`/api/items/${id}`, {
-        name: values.name,
-        currentStock: values.current_stock,
-        description: values.description,
-        warehouseId: warehouse_id,
-      });
-      message.success("Item updated successfully!");
+  useEffect(() => {
+    const userString = localStorage.getItem("user");
+    const user: UserType | null = userString ? JSON.parse(userString) : null;
+
+    if (user?.role !== "Admin") {
       router.push("/");
-    } catch (err) {
-      console.error(err);
-      message.error("Failed to update item.");
-    } finally {
-      setSaving(false);
     }
-  }
+  }, []);
 
   if (loading) {
     return (
