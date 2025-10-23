@@ -136,7 +136,7 @@ export default function StockMovementPage() {
     <Layout className="min-h-screen bg-gray-50">
       <Navbar logout={logout} />
 
-      <Content className="max-w-6xl mx-auto p-6 space-y-8">
+      <Content className="w-full max-w-full md:max-w-6xl mx-auto p-4 sm:p-6 space-y-8">
         <div>
           <div className="flex flex-col md:flex-row justify-between items-center mb-4 gap-3">
             <h1 className="text-xl md:text-2xl font-semibold">

@@ -201,7 +201,7 @@ export default function DashboardPage() {
     <Layout className="min-h-screen bg-gray-50">
       <Navbar logout={logout} />
 
-      <Content className="max-w-6xl mx-auto p-6 space-y-8">
+      <Content className="w-full max-w-full md:max-w-6xl mx-auto p-4 sm:p-6 space-y-8">
         <CreateForm
           fetchItems={() =>
             fetchItems(pagination.page, pagination.limit, debouncedSearch)
