@@ -11,7 +11,7 @@ import { useRouter } from "next/navigation";
 
 type Movement = {
   id: number;
-  type: "IN" | "ADJUSTMENT" | "DELETE";
+  type: "IN" | "ADJUSTMENT" | "DELETE" | "OUT";
   quantity: number;
   created_at: string;
   item_name: string | null;
