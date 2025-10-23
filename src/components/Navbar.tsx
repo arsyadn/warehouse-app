@@ -95,7 +95,6 @@ const Navbar: React.FC<NavbarProps> = ({ logout }) => {
           </h1>
         </div>
 
-        {/* Prevent hydration mismatch */}
         {hydrated && (
           <>
             <nav className="hidden md:flex items-center gap-8 font-medium">
