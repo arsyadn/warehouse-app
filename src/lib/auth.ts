@@ -1,4 +1,3 @@
-// src/lib/auth.ts
 import prisma from "./prisma";
 import { verifyToken } from "./jwt";
 

@@ -23,7 +23,6 @@ authAxios.interceptors.response.use(
       typeof window !== "undefined" &&
       !["/login", "/register"].includes(window.location.pathname)
     ) {
-      // Remove token & redirect to login
       localStorage.removeItem("token");
       window.location.href = "/login";
     }

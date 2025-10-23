@@ -1,4 +1,3 @@
-// src/lib/jwt.ts
 import jwt, { SignOptions } from "jsonwebtoken";
 
 const SECRET = process.env.JWT_SECRET_KEY || "dev-secret";
