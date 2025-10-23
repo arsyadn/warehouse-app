@@ -11,6 +11,11 @@ export async function GET(req: Request) {
   const offset = (page - 1) * limit;
 
   try {
+    const authHeader = req.headers.get("authorization") || undefined;
+    const user = await getUserFromAuthHeader(authHeader);
+    if (!user)
+      return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+
     // count total items
     const countResult = await prisma.$queryRawUnsafe<{ count: number }[]>(
       `
@@ -66,8 +71,6 @@ export async function POST(req: Request) {
     const user = await getUserFromAuthHeader(authHeader);
     if (!user)
       return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
-    if (!["Admin", "Staff"].includes(user.role.name))
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
     const body = await req.json();
     const { name, description, currentStock = 0, warehouseId } = body;

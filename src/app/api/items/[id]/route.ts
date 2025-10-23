@@ -9,6 +9,11 @@ export async function GET(
   const { id } = await context.params;
 
   try {
+    const authHeader = req.headers.get("authorization") || undefined;
+    const user = await getUserFromAuthHeader(authHeader);
+    if (!user)
+      return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+
     const item = await prisma.item.findUnique({
       where: { id: Number(id) },
     });
@@ -35,7 +40,9 @@ export async function PUT(
   try {
     const authHeader = req.headers.get("authorization") || undefined;
     const user = await getUserFromAuthHeader(authHeader);
-    if (!user || user.role.name !== "Admin")
+    if (!user)
+      return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+    if (user.role.name !== "Admin")
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
     const body = await req.json();
@@ -99,9 +106,12 @@ export async function DELETE(
   try {
     const { searchParams } = new URL(req.url);
     const warehouseId = searchParams.get("warehouse");
+
     const authHeader = req.headers.get("authorization") || undefined;
     const user = await getUserFromAuthHeader(authHeader);
-    if (!user || user.role.name !== "Admin")
+    if (!user)
+      return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+    if (user.role.name !== "Admin")
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
     const item = await prisma.item.update({

@@ -18,10 +18,10 @@ export async function GET(req: Request) {
     const url = new URL(req.url);
     const authHeader = req.headers.get("authorization") || undefined;
     const user = await getUserFromAuthHeader(authHeader);
-
-    if (!user || user.role.name !== "Admin") {
+    if (!user)
+      return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+    if (user.role.name !== "Admin")
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-    }
 
     const page = parseInt(url.searchParams.get("page") || "1", 10);
     const limit = parseInt(url.searchParams.get("limit") || "10", 10);

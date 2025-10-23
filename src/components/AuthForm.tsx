@@ -43,7 +43,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ type }) => {
       const { username, email, password, confirmPassword } = values;
 
       if (type === "register" && password !== confirmPassword) {
-        message.error("Passwords do not match");
+        setErrorMsg("Passwords do not match");
         return;
       }
 
