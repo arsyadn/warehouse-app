@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import prisma from "../../../../../../../../../BiHealth/warehouse-app/src/lib/prisma";
-import { hashPassword } from "../../../../../../../../../BiHealth/warehouse-app/src/lib/hash";
+import prisma from "../../../../lib/prisma";
+import { hashPassword } from "../../../../lib/hash";
 
 export async function POST(req: Request) {
   try {
