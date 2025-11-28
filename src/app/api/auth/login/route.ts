@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
-import prisma from "../../../../lib/prisma";
-import { verifyPassword } from "../../../../lib/hash";
-import { signToken } from "../../../../lib/jwt";
+import prisma from "../../../../../../../../../BiHealth/warehouse-app/src/lib/prisma";
+import { verifyPassword } from "../../../../../../../../../BiHealth/warehouse-app/src/lib/hash";
+import { signToken } from "../../../../../../../../../BiHealth/warehouse-app/src/lib/jwt";
 
 export async function POST(req: Request) {
   try {

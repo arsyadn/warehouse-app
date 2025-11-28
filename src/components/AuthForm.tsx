@@ -103,13 +103,13 @@ const AuthForm: React.FC<AuthFormProps> = ({ type }) => {
           {/* Header */}
           <div className="text-center mb-6">
             <Title level={3}>
-              <span className="text-green-600">My</span>{" "}
-              <span className="text-blue-700">Siloam</span>
+              <span className="text-green-600">Company</span>{" "}
+              <span className="text-blue-700">Warehouse</span>
             </Title>
             <Text type="secondary">
               {type === "login"
-                ? "Welcome to Siloam Dashboard"
-                : "Create your Siloam account"}
+                ? "Welcome to Warehouse Dashboard"
+                : "Create your Warehouse account"}
             </Text>
           </div>
           {errorMsg && (

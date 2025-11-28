@@ -2,11 +2,8 @@
 import "./globals.css";
 
 export const metadata = {
-  title: "Siloam Dashboard",
+  title: "Warehouse Dashboard",
   description: "Warehouse Management System",
-  icons: {
-    icon: [{ url: "/logo-siloam.png", type: "image/png" }],
-  },
 };
 
 export default function RootLayout({

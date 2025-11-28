@@ -83,15 +83,8 @@ const Navbar: React.FC<NavbarProps> = ({ logout }) => {
       <div className="max-w-7xl mx-auto px-6 flex justify-between items-center h-16">
         {/* Logo + Title */}
         <div className="flex items-center gap-3">
-          <Image
-            src="/logo-siloam.png"
-            alt="Siloam Logo"
-            width={40}
-            height={40}
-            className="object-contain"
-          />
           <h1 className="text-lg font-semibold text-gray-800">
-            Siloam Dashboard
+            Warehouse Dashboard
           </h1>
         </div>
 

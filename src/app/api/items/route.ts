@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import prisma from "../../../lib/prisma";
-import { getUserFromAuthHeader } from "../../../lib/auth";
+import prisma from "../../../../../../../../BiHealth/warehouse-app/src/lib/prisma";
+import { getUserFromAuthHeader } from "../../../../../../../../BiHealth/warehouse-app/src/lib/auth";
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
